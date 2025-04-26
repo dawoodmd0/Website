@@ -1,0 +1,87 @@
+/* Shared styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.slot-option {
+  transition: all 0.3s ease;
+}
+
+.slot-option.selected {
+  border-color: #334155;
+  background-color: #f8fafc;
+}
+
+.slot-option:hover {
+  transform: translateY(-2px);
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .shadow-xl {
+    box-shadow: none;
+  }
+}
+
+/* Form input focus styles */
+input:focus {
+  outline: none;
+  border-color: #334155;
+}
+
+/* Button loading state */
+.btn-loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Notification animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notification-enter {
+  animation: slideIn 0.3s ease-out;
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Location Selection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="parking.css" />
+  </head>
+  <header class="p-5 mb-8 bg-slate-700 text-white">
+    <h1 class="text-2xl font-bold text-center">ParkEasy - Select Location</h1>
+  </header>
+
+  <main class="container mx-auto px-4 max-w-[1400px]">
+    <section class="max-w-[1200px] mx-auto">
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-semibold mb-6">
+          Available Parking Locations
+        </h2>
+
+        <div
+          class="grid gap-4 md:grid-cols-2 xl:grid-cols-2 2xl:gap-6"
+          id="location-grid"
+        >
+          <article class="location-card" data-location="downtown">
+            <h3 class="text-lg font-bold mb-2">Downtown Parking</h3>
+            <p class="availability text-gray-600 mb-4">
+              Available Spots: <span class="font-semibold">25</span>
+            </p>
+            <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              Select Location
+            </button>
+          </article>
+
+          <article class="location-card" data-location="mall">
+            <h3 class="text-lg font-bold mb-2">Mall Complex</h3>
+            <p class="availability text-gray-600 mb-4">
+              Available Spots: <span class="font-semibold">12</span>
+            </p>
+            <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              Select Location
+            </button>
+          </article>
+
+          <article class="location-card" data-location="airport">
+            <h3 class="text-lg font-bold mb-2">Airport Terminal</h3>
+            <p class="availability text-gray-600 mb-4">
+              Available Spots: <span class="font-semibold">8</span>
+            </p>
+            <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              Select Location
+            </button>
+          </article>
+
+          <article class="location-card" data-location="station">
+            <h3 class="text-lg font-bold mb-2">Train Station</h3>
+            <p class="availability text-gray-600 mb-4">
+              Available Spots: <span class="font-semibold">15</span>
+            </p>
+            <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              Select Location
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal for showing messages -->
+    <div id="message-modal" class="modal hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+      <div class="modal-content bg-white p-6 rounded shadow-lg text-center">
+        <h3 id="modal-title" class="text-lg font-bold mb-4"></h3>
+        <p id="modal-message" class="mb-6"></p>
+        <button id="modal-close" class="modal-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-center py-4 mt-8 text-gray-600">
+    <p>&copy; 2024 ParkEasy. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Get all "Select Location" buttons
+      const selectButtons = document.querySelectorAll(".check-btn");
+
+      // Add click event listener to each button
+      selectButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const locationCard = event.target.closest(".location-card");
+          const locationName = locationCard.querySelector("h3").textContent;
+
+          // Show confirmation message in modal
+          const modal = document.getElementById("message-modal");
+          const modalTitle = document.getElementById("modal-title");
+          const modalMessage = document.getElementById("modal-message");
+          const modalClose = document.getElementById("modal-close");
+
+          modalTitle.textContent = "Location Selected";
+          modalMessage.textContent = `You have selected ${locationName}. Redirecting to payment...`;
+          modal.classList.remove("hidden");
+
+          // Close modal and redirect to payment.html after a short delay
+          modalClose.addEventListener("click", () => {
+            modal.classList.add("hidden");
+            window.location.href = "payment.html";
+          });
+
+          setTimeout(() => {
+            modal.classList.add("hidden");
+            window.location.href = "payment.html";
+          }, 3000); // Redirect after 3 seconds
+        });
+      });
+
+      // Make "Available Parking Locations" title bold
+      const title = document.querySelector("h2");
+      title.classList.add("font-bold");
+    });
+  </script>

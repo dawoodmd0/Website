@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Booking Confirmation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body class="bg-neutral-100 min-h-screen">
+    <header class="p-5 bg-slate-700 text-white">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">ParkEasy</h1>
+        <button id="logoutBtn" class="text-sm hover:underline">Logout</button>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <h2 class="text-2xl font-bold mb-6">Booking Confirmation</h2>
+
+          <div class="space-y-6">
+            <!-- Location Details -->
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Location Details</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="font-medium" id="locationName"></p>
+                <p class="text-gray-600" id="locationAddress"></p>
+              </div>
+            </div>
+
+            <!-- Parking Details -->
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Parking Details</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-gray-600">Slot Type</p>
+                    <p class="font-medium" id="slotType"></p>
+                  </div>
+                  <div>
+                    <p class="text-gray-600">Slot Number</p>
+                    <p class="font-medium" id="slotNumber"></p>
+                  </div>
+                  <div>
+                    <p class="text-gray-600">Rate</p>
+                    <p class="font-medium" id="rate"></p>
+                  </div>
+                  <div>
+                    <p class="text-gray-600">Duration</p>
+                    <p class="font-medium">2 hours</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Payment Details</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-600">Parking Fee (2 hours)</span>
+                  <span class="font-medium" id="parkingFee"></span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-600">Service Fee</span>
+                  <span class="font-medium">$1.00</span>
+                </div>
+                <div class="border-t border-gray-200 mt-4 pt-4">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Total</span>
+                    <span class="font-semibold" id="totalAmount"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Payment Method</h3>
+              <div class="space-y-2">
+                <label
+                  class="flex items-center p-4 border rounded-lg cursor-pointer hover:border-slate-500"
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="card"
+                    checked
+                    class="mr-3"
+                  />
+                  <span>Credit/Debit Card</span>
+                </label>
+                <label
+                  class="flex items-center p-4 border rounded-lg cursor-pointer hover:border-slate-500"
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="paypal"
+                    class="mr-3"
+                  />
+                  <span>PayPal</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-4">
+              <button
+                id="cancelBtn"
+                class="flex-1 px-6 py-3 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                id="confirmBtn"
+                class="flex-1 px-6 py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors"
+              >
+                Confirm & Pay
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Check authentication and data
+        const authToken = sessionStorage.getItem("auth_token");
+        const location = JSON.parse(
+          sessionStorage.getItem("selected_location"),
+        );
+        const slot = JSON.parse(sessionStorage.getItem("selected_slot"));
+
+        if (!authToken || !location || !slot) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        // Populate booking details
+        document.getElementById("locationName").textContent = location.name;
+        document.getElementById("locationAddress").textContent =
+          location.address;
+        document.getElementById("slotType").textContent = slot.type;
+        document.getElementById("slotNumber").textContent = slot.id;
+
+        // Calculate fees
+        const rateMatch = location.rate.match(/\$(\d+)/);
+        const hourlyRate = rateMatch ? parseInt(rateMatch[1]) : 0;
+        const parkingFee = hourlyRate * 2;
+        const totalAmount = parkingFee + 1; // Including $1 service fee
+
+        document.getElementById("rate").textContent = location.rate;
+        document.getElementById("parkingFee").textContent =
+          `$${parkingFee.toFixed(2)}`;
+        document.getElementById("totalAmount").textContent =
+          `$${totalAmount.toFixed(2)}`;
+
+        // Button handlers
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          sessionStorage.clear();
+          localStorage.clear();
+          window.location.href = "login.html";
+        });
+
+        document.getElementById("cancelBtn").addEventListener("click", () => {
+          window.location.href = "parking.html";
+        });
+
+        document
+          .getElementById("confirmBtn")
+          .addEventListener("click", async () => {
+            const button = document.getElementById("confirmBtn");
+            button.disabled = true;
+            button.textContent = "Processing...";
+
+            try {
+              // Simulate payment processing
+              await new Promise((resolve) => setTimeout(resolve, 2000));
+
+              // Generate booking reference
+              const bookingRef = Math.random()
+                .toString(36)
+                .substring(2, 10)
+                .toUpperCase();
+
+              // Store booking details
+              const bookingDetails = {
+                reference: bookingRef,
+                location: location.name,
+                slot: slot.id,
+                type: slot.type,
+                amount: totalAmount,
+                date: new Date().toISOString(),
+              };
+
+              // Store in local storage for history
+              const bookings = JSON.parse(
+                localStorage.getItem("bookings") || "[]",
+              );
+              bookings.push(bookingDetails);
+              localStorage.setItem("bookings", JSON.stringify(bookings));
+
+              // Show success message
+              alert(
+                `Booking confirmed! Your reference number is ${bookingRef}`,
+              );
+
+              // Redirect to home
+              window.location.href = "gps.html";
+            } catch (error) {
+              alert("Payment failed. Please try again.");
+              button.disabled = false;
+              button.textContent = "Confirm & Pay";
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

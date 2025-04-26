@@ -1,0 +1,123 @@
+/* Base styles */
+.location-card {
+    @apply bg-white rounded-lg p-6 border border-gray-200 transition-all duration-300 hover:shadow-lg;
+  }
+  
+  /* 15.6-inch screen optimization (1920x1080) */
+  @media (min-width: 1920px) {
+    .location-card {
+      @apply p-8;
+    }
+  
+    .location-card h3 {
+      @apply text-xl mb-4;
+    }
+  
+    .location-card .availability {
+      @apply text-lg mb-6;
+    }
+  
+    .check-btn {
+      @apply py-3 text-lg;
+    }
+  }
+  
+  /* Optimal viewing experience for 15.6-inch */
+  @media (min-width: 1366px) and (max-width: 1920px) {
+    .location-card {
+      @apply p-7;
+    }
+  
+    .container {
+      @apply max-w-[1300px];
+    }
+  
+    #location-grid {
+      @apply gap-6;
+    }
+  }
+  
+  .location-card h3 {
+    @apply text-lg font-semibold mb-3 text-slate-700;
+  }
+  
+  .location-card .availability {
+    @apply text-gray-600 mb-4;
+  }
+  
+  .location-card .availability span {
+    @apply font-semibold text-green-600;
+  }
+  
+  .check-btn {
+    @apply w-full py-2 px-4 bg-slate-700 text-white rounded-md
+             transition-colors duration-200 hover:bg-slate-800
+             focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-50;
+  }
+  
+  /* Modal styles */
+  .modal {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+  
+  .modal.hidden {
+    display: none;
+  }
+  
+  .modal-content {
+    @apply bg-white rounded-lg p-6 max-w-md w-full mx-4;
+  }
+  
+  /* Modal optimization for 15.6-inch */
+  @media (min-width: 1366px) {
+    .modal-content {
+      @apply max-w-lg p-8;
+    }
+  
+    .modal-content h3 {
+      @apply text-2xl mb-6;
+    }
+  
+    .modal-content p {
+      @apply text-lg mb-8;
+    }
+  
+    .modal-btn {
+      @apply py-3 text-lg;
+    }
+  }
+  
+  .modal-content h3 {
+    @apply text-xl font-semibold mb-4 text-slate-700;
+  }
+  
+  .modal-content p {
+    @apply text-gray-600 mb-6;
+  }
+  
+  .modal-btn {
+    @apply w-full py-2 px-4 bg-slate-700 text-white rounded-md
+             transition-colors duration-200 hover:bg-slate-800;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .location-card {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .location-card {
+      @apply p-4;
+    }
+  }
+  

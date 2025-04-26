@@ -1,0 +1,125 @@
+<div class="p-5 min-h-screen bg-neutral-100">
+    <header class="p-5 mb-8 rounded-lg bg-slate-700 text-white max-sm:p-4">
+      <h1 class="m-0 text-2xl">ParkEasy - Book Your Parking Slot</h1>
+    </header>
+  
+    <main class="flex gap-5 max-md:flex-col">
+      <section class="w-2/5 max-md:w-full">
+        <article
+          class="p-5 rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.1)] bg-white"
+        >
+          <h2 class="text-xl font-semibold mb-4">Book Your Slot</h2>
+          <form>
+            <div class="mb-4">
+              <label class="block mb-1.5">
+                <span>Date:</span>
+                <input
+                  type="date"
+                  class="p-2 mt-1.5 w-full rounded border border-solid border-zinc-300"
+                  id="booking-date"
+                />
+              </label>
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1.5">
+                <span>Time:</span>
+                <input
+                  type="time"
+                  class="p-2 mt-1.5 w-full rounded border border-solid border-zinc-300"
+                  id="booking-time"
+                />
+              </label>
+            </div>
+          </form>
+        </article>
+      </section>
+  
+      <section class="w-3/5 max-md:w-full">
+        <article
+          class="p-5 rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.1)] bg-white"
+        >
+          <h2 class="text-xl font-semibold mb-4">Available Slots</h2>
+          <div
+            class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(120px,1fr))] max-sm:grid-cols-[repeat(2,1fr)]"
+            id="slots-container"
+          ></div>
+          <button
+            class="px-6 py-3 mt-5 w-full rounded cursor-pointer bg-slate-700 border-[none] text-white hover:bg-[#34495e] transition-colors duration-200"
+            id="book-button"
+          >
+            Book Now
+          </button>
+        </article>
+      </section>
+    </main>
+  </div>
+  
+  <script>
+    (() => {
+      const state = {
+        selectedDate: "",
+        selectedTime: "",
+        selectedSlot: null,
+        availableSlots: [
+          { id: 1, number: "A1", status: "available" },
+          { id: 2, number: "A2", status: "available" },
+          { id: 3, number: "B1", status: "available" },
+          { id: 4, number: "B2", status: "available" },
+        ],
+      };
+  
+      // DOM Elements
+      const dateInput = document.getElementById("booking-date");
+      const timeInput = document.getElementById("booking-time");
+      const slotsContainer = document.getElementById("slots-container");
+      const bookButton = document.getElementById("book-button");
+  
+      // Event Handlers
+      dateInput.addEventListener("input", (e) => {
+        state.selectedDate = e.target.value;
+        updateUI();
+      });
+  
+      timeInput.addEventListener("input", (e) => {
+        state.selectedTime = e.target.value;
+        updateUI();
+      });
+  
+      function createSlotButton(slot) {
+        const button = document.createElement("button");
+        button.className = `p-4 rounded transition-all cursor-pointer duration-200 hover:bg-[#f0f0f0]`;
+        button.innerHTML = `
+        <span>Slot</span>
+        <span>${slot.number}</span>
+      `;
+  
+        // Update button styles based on selection state
+        if (state.selectedSlot === slot.id) {
+          button.style.border = "2px solid #2c3e50";
+          button.style.background = "#e8f4ff";
+        } else {
+          button.style.border = "1px solid #ddd";
+          button.style.background = "white";
+        }
+  
+        button.addEventListener("click", () => {
+          state.selectedSlot = slot.id;
+          updateUI();
+        });
+  
+        return button;
+      }
+  
+      function updateUI() {
+        // Update slots
+        slotsContainer.innerHTML = "";
+        state.availableSlots.forEach((slot) => {
+          slotsContainer.appendChild(createSlotButton(slot));
+        });
+      }
+  
+      // Initialize UI
+      updateUI();
+    })();
+  </script>
+  

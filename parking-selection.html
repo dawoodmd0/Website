@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Select Parking</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Loading Overlay -->
+    <div
+      id="loadingOverlay"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-xl">
+        <div
+          class="animate-spin rounded-full h-10 w-10 border-b-2 border-slate-700 mx-auto"
+        ></div>
+        <p id="loadingText" class="mt-4 text-gray-700">
+          Finding parking spots...
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <header class="bg-slate-700 text-white p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">ParkEasy</h1>
+        <button
+          onclick="window.location.href='index.html'"
+          class="text-sm hover:underline"
+        >
+          Back
+        </button>
+      </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+      <!-- Location Search -->
+      <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <div class="flex gap-4 flex-wrap">
+          <button
+            id="getCurrentLocation"
+            class="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800"
+          >
+            Use My Location
+          </button>
+          <input
+            type="text"
+            id="searchLocation"
+            placeholder="Enter location or address"
+            class="flex-grow px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-slate-500"
+          />
+        </div>
+        <p id="locationStatus" class="mt-2 text-gray-600"></p>
+      </div>
+
+      <!-- Map -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+        <div id="map"></div>
+      </div>
+
+      <!-- Parking Spots -->
+      <div id="parkingSpots" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Parking spots will be added here -->
+      </div>
+    </main>
+
+    <script>
+      let map;
+      let markers = [];
+      let currentInfoWindow = null;
+
+      // Initialize map
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: -34.397, lng: 150.644 },
+          zoom: 15,
+        });
+
+        // Initialize search box
+        const searchInput = document.getElementById("searchLocation");
+        const searchBox = new google.maps.places.SearchBox(searchInput);
+
+        map.addListener("bounds_changed", () => {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        searchBox.addListener("places_changed", () => {
+          const places = searchBox.getPlaces();
+          if (places.length === 0) return;
+
+          const place = places[0];
+          if (!place.geometry || !place.geometry.location) return;
+
+          map.setCenter(place.geometry.location);
+          findNearbyParking(place.geometry.location);
+        });
+      }
+
+      // Get current location
+      document
+        .getElementById("getCurrentLocation")
+        .addEventListener("click", () => {
+          if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+            return;
+          }
+
+          document.getElementById("loadingOverlay").classList.remove("hidden");
+          document.getElementById("loadingText").textContent =
+            "Getting your location...";
+
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+              map.setCenter(pos);
+              findNearbyParking(pos);
+            },
+            (error) => {
+              document.getElementById("loadingOverlay").classList.add("hidden");
+              alert("Error getting your location: " + error.message);
+            },
+          );
+        });
+
+      // Find nearby parking
+      function findNearbyParking(location) {
+        document.getElementById("loadingText").textContent =
+          "Finding parking spots...";
+
+        // Clear existing markers
+        markers.forEach((marker) => marker.setMap(null));
+        markers = [];
+        document.getElementById("parkingSpots").innerHTML = "";
+
+        const service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(
+          {
+            location: location,
+            radius: 1500,
+            type: ["parking"],
+          },
+          (results, status) => {
+            document.getElementById("loadingOverlay").classList.add("hidden");
+
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              results.forEach(createParkingSpot);
+            } else {
+              alert("Error finding parking spots");
+            }
+          },
+        );
+      }
+
+      // Create parking spot marker and card
+      function createParkingSpot(place) {
+        // Add marker
+        const marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location,
+          title: place.name,
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: `
+                    <div class="p-2">
+                        <h3 class="font-bold">${place.name}</h3>
+                        <p class="text-sm">${place.vicinity}</p>
+                        <button onclick="selectParking(${JSON.stringify(place).replace(/"/g, "&quot;")})"
+                                class="mt-2 px-3 py-1 bg-slate-700 text-white rounded text-sm">
+                            Select
+                        </button>
+                    </div>
+                `,
+        });
+
+        marker.addListener("click", () => {
+          if (currentInfoWindow) currentInfoWindow.close();
+          infoWindow.open(map, marker);
+          currentInfoWindow = infoWindow;
+        });
+
+        markers.push(marker);
+
+        // Add card
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-lg shadow-md p-4";
+        card.innerHTML = `
+                <h3 class="font-bold text-lg">${place.name}</h3>
+                <p class="text-gray-600 mb-2">${place.vicinity}</p>
+                ${
+                  place.rating
+                    ? `
+                    <p class="text-yellow-500 mb-2">Rating: ${place.rating} ⭐</p>
+                `
+                    : ""
+                }
+                <button onclick="selectParking(${JSON.stringify(place).replace(/"/g, "&quot;")})"
+                        class="w-full bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800">
+                    Select This Spot
+                </button>
+            `;
+
+        document.getElementById("parkingSpots").appendChild(card);
+      }
+
+      // Select parking spot
+      function selectParking(place) {
+        const parkingData = {
+          id: place.place_id,
+          name: place.name,
+          address: place.vicinity,
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+          rating: place.rating,
+        };
+
+        sessionStorage.setItem("selected_parking", JSON.stringify(parkingData));
+        window.location.href = "booking.html";
+      }
+
+      // Initialize
+      initMap();
+    </script>
+  </body>
+</html>

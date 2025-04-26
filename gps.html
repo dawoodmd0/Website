@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Find Parking</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #map {
+        height: 70vh;
+        width: 100%;
+      }
+      .location-card {
+        transition: all 0.3s ease;
+      }
+      .location-card:hover {
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <!-- Main Content -->
+    <div class="min-h-screen">
+      <!-- Header -->
+      <header class="bg-slate-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+          <h1 class="text-2xl font-bold">ParkEasy</h1>
+        </div>
+      </header>
+
+      <!-- Map Container -->
+      <div class="container mx-auto px-4 pb-4">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div id="map"></div>
+        </div>
+      </div>
+
+      <!-- Parking Locations -->
+      <div class="container mx-auto px-4 py-6">
+        <h2 class="text-xl font-bold mb-4">Nearby Parking Locations</h2>
+        <div
+          id="parkingLocations"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <!-- Parking locations will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize the map
+        function initMap() {
+          const kctLocation = { lat: 11.1271, lng: 77.0365 }; // Latitude and Longitude of KCT
+
+          // Create the map centered at KCT
+          const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: kctLocation,
+          });
+
+          // Add a marker for KCT
+          const marker = new google.maps.Marker({
+            position: kctLocation,
+            map: map,
+            title: "Kumaraguru College of Technology",
+          });
+
+          // Add KCT to the parking locations section
+          addKCTToParkingLocations(kctLocation);
+        }
+
+        // Add KCT to the parking locations section
+        function addKCTToParkingLocations(location) {
+          const parkingLocations = document.getElementById("parkingLocations");
+
+          const card = document.createElement("div");
+          card.className =
+            "location-card bg-white rounded-lg shadow-md overflow-hidden";
+          card.innerHTML = `
+            <div class="p-4">
+              <h3 class="font-bold text-lg mb-2">Kumaraguru College of Technology</h3>
+              <p class="text-gray-600 text-sm mb-2">Coimbatore, Tamil Nadu</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <span class="text-yellow-500">★</span>
+                  <span class="ml-1 text-sm">4.5</span>
+                </div>
+                <button class="select-location-btn px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-800 transition-colors">
+                  Select
+                </button>
+              </div>
+            </div>
+          `;
+
+          // Add click handler
+          card
+            .querySelector(".select-location-btn")
+            .addEventListener("click", () => {
+              sessionStorage.setItem(
+                "selected_location",
+                JSON.stringify({
+                  id: "kct",
+                  name: "Kumaraguru College of Technology",
+                  address: "Coimbatore, Tamil Nadu",
+                  lat: location.lat,
+                  lng: location.lng,
+                  rating: 4.5,
+                })
+              );
+              window.location.href = "parking.html";
+            });
+
+          parkingLocations.appendChild(card);
+        }
+
+        // Initialize the map
+        initMap();
+      });
+    </script>
+  </body>
+</html>

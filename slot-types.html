@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Select Slot Type</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-neutral-100 min-h-screen">
+    <header class="bg-slate-700 text-white py-4">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">ParkEasy</h1>
+        <nav>
+          <button id="logout" class="text-sm hover:underline">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-xl p-6">
+          <h2 class="text-2xl font-semibold mb-6">Select Parking Slot Type</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- VIP Slot -->
+            <div
+              class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700"
+              data-type="vip"
+            >
+              <h3 class="text-xl font-semibold mb-3">VIP</h3>
+              <div class="mb-4">
+                <p class="text-2xl font-bold text-slate-700">$20/hr</p>
+                <p class="text-sm text-gray-600">Premium Location</p>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li>✓ Priority Access</li>
+                <li>✓ Covered Parking</li>
+                <li>✓ Security Service</li>
+                <li>✓ Valet Service</li>
+              </ul>
+            </div>
+
+            <!-- Premium Slot -->
+            <div
+              class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700"
+              data-type="premium"
+            >
+              <h3 class="text-xl font-semibold mb-3">Premium</h3>
+              <div class="mb-4">
+                <p class="text-2xl font-bold text-slate-700">$15/hr</p>
+                <p class="text-sm text-gray-600">Enhanced Comfort</p>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li>✓ Covered Parking</li>
+                <li>✓ Security Service</li>
+                <li>✓ Wide Spaces</li>
+                <li>✗ Valet Service</li>
+              </ul>
+            </div>
+
+            <!-- Normal Slot -->
+            <div
+              class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700"
+              data-type="normal"
+            >
+              <h3 class="text-xl font-semibold mb-3">Normal</h3>
+              <div class="mb-4">
+                <p class="text-2xl font-bold text-slate-700">$10/hr</p>
+                <p class="text-sm text-gray-600">Standard Parking</p>
+              </div>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li>✓ Standard Space</li>
+                <li>✓ Basic Security</li>
+                <li>✗ Covered Parking</li>
+                <li>✗ Valet Service</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t pt-6">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="font-semibold">Selected Type:</h3>
+                <p id="selectedType" class="text-gray-600">None selected</p>
+              </div>
+              <div>
+                <h3 class="font-semibold">Price:</h3>
+                <p id="selectedPrice" class="text-gray-600">$0/hr</p>
+              </div>
+            </div>
+
+            <button
+              id="proceedToPayment"
+              class="w-full py-3 px-4 bg-slate-700 text-white rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+              disabled
+            >
+              Proceed to Payment
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="slot-selection.js"></script>
+  </body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Navigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+    <style>
+      #navigationMap {
+        height: 100vh;
+        width: 100%;
+      }
+      .navigation-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: transform 0.3s ease-in-out;
+      }
+      .navigation-handle {
+        width: 40px;
+        height: 4px;
+        background: #cbd5e0;
+        border-radius: 2px;
+        margin: 8px auto;
+      }
+      .direction-step {
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .direction-step.active {
+        background: #edf2f7;
+      }
+    </style>
+  </head>
+  <body class="bg-neutral-100">
+    <!-- Navigation Map -->
+    <div id="navigationMap"></div>
+
+    <!-- Navigation Panel -->
+    <div class="navigation-panel">
+      <div class="navigation-handle"></div>
+      <div class="p-4">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-xl font-bold" id="destinationName"></h2>
+            <p class="text-gray-600" id="eta"></p>
+          </div>
+          <button
+            id="startNavigation"
+            class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-800"
+          >
+            Start
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+          <div
+            id="progressBar"
+            class="bg-slate-700 h-2.5 rounded-full"
+            style="width: 0%"
+          ></div>
+        </div>
+
+        <!-- Navigation Instructions -->
+        <div id="navigationInstructions" class="max-h-60 overflow-y-auto"></div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 mt-4">
+          <button
+            id="cancelNavigation"
+            class="flex-1 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+          <button
+            id="reserveSpot"
+            class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Reserve Spot
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        let currentLocationMarker;
+        let navigationWatchId;
+        let destination;
+        let isNavigating = false;
+
+        // Initialize from session storage
+        const parkingLocation = JSON.parse(
+          sessionStorage.getItem("selected_location"),
+        );
+        if (!parkingLocation) {
+          window.location.href = "gps.html";
+          return;
+        }
+
+        // Initialize map
+        function initMap() {
+          directionsService = new google.maps.DirectionsService();
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            polylineOptions: {
+              strokeColor: "#4A5568",
+              strokeWeight: 6,
+            },
+          });
+
+          map = new google.maps.Map(document.getElementById("navigationMap"), {
+            zoom: 16,
+            center: { lat: parkingLocation.lat, lng: parkingLocation.lng },
+            mapTypeControl: false,
+            streetViewControl: false,
+          });
+
+          directionsRenderer.setMap(map);
+
+          // Set destination marker
+          destination = new google.maps.Marker({
+            position: { lat: parkingLocation.lat, lng: parkingLocation.lng },
+            map: map,
+            icon: {
+              url: "https://maps.google.com/mapfiles/ms/icons/parking.png",
+              scaledSize: new google.maps.Size(32, 32),
+            },
+          });
+
+          // Update UI
+          document.getElementById("destinationName").textContent =
+            parkingLocation.name;
+        }
+
+        // Start real-time location tracking
+        function startTracking() {
+          if (navigator.geolocation) {
+            navigationWatchId = navigator.geolocation.watchPosition(
+              updateLocation,
+              handleLocationError,
+              {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+              },
+            );
+          }
+        }
+
+        // Update current location
+        function updateLocation(position) {
+          const currentLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          if (!currentLocationMarker) {
+            currentLocationMarker = new google.maps.Marker({
+              position: currentLocation,
+              map: map,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                strokeColor: "white",
+                strokeWeight: 2,
+              },
+            });
+          } else {
+            currentLocationMarker.setPosition(currentLocation);
+          }
+
+          if (isNavigating) {
+            updateRoute(currentLocation);
+          }
+        }
+
+        // Update navigation route
+        function updateRoute(origin) {
+          directionsService.route(
+            {
+              origin: origin,
+              destination: {
+                lat: parkingLocation.lat,
+                lng: parkingLocation.lng,
+              },
+              travelMode: "DRIVING",
+            },
+            (response, status) => {
+              if (status === "OK") {
+                directionsRenderer.setDirections(response);
+                updateNavigationInstructions(response.routes[0].legs[0]);
+              }
+            },
+          );
+        }
+
+        // Update navigation instructions
+        function updateNavigationInstructions(leg) {
+          const container = document.getElementById("navigationInstructions");
+          container.innerHTML = "";
+
+          // Update ETA
+          const eta = new Date();
+          eta.setSeconds(eta.getSeconds() + leg.duration.value);
+          document.getElementById("eta").textContent =
+            `ETA: ${eta.toLocaleTimeString()} (${leg.duration.text})`;
+
+          // Update progress
+          const progress = (1 - leg.distance.value / leg.distance.value) * 100;
+          document.getElementById("progressBar").style.width = `${progress}%`;
+
+          // Show turn-by-turn directions
+          leg.steps.forEach((step, index) => {
+            const div = document.createElement("div");
+            div.className = "direction-step";
+            div.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full mr-3">
+                                ${index + 1}
+                            </div>
+                            <div>${step.instructions}</div>
+                        </div>
+                        <div class="text-sm text-gray-500 ml-11">${step.distance.text}</div>
+                    `;
+            container.appendChild(div);
+          });
+        }
+
+        // Handle location errors
+        function handleLocationError(error) {
+          console.error("Error getting location:", error);
+          alert("Unable to get your location. Please check your GPS settings.");
+        }
+
+        // Button handlers
+        document
+          .getElementById("startNavigation")
+          .addEventListener("click", () => {
+            isNavigating = true;
+            startTracking();
+            document.getElementById("startNavigation").style.display = "none";
+          });
+
+        document
+          .getElementById("cancelNavigation")
+          .addEventListener("click", () => {
+            if (navigationWatchId) {
+              navigator.geolocation.clearWatch(navigationWatchId);
+            }
+            window.location.href = "gps.html";
+          });
+
+        document.getElementById("reserveSpot").addEventListener("click", () => {
+          sessionStorage.setItem("navigation_active", "true");
+          window.location.href = "parking.html";
+        });
+
+        // Initialize map
+        initMap();
+      });
+    </script>
+  </body>
+</html>

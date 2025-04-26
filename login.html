@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParkEasy - Login/Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body
+    class="bg-neutral-100 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+  >
+    <main class="container mx-auto max-w-md w-full">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-700">ParkEasy</h1>
+        <p class="text-gray-600 mt-2">Your Smart Parking Solution</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <!-- Form Toggle -->
+        <div class="flex mb-6 bg-gray-100 rounded-lg p-1" role="tablist">
+          <button
+            class="w-1/2 py-2 rounded-md text-center transition-all duration-300 tab-btn active"
+            data-form="login"
+          >
+            Login
+          </button>
+          <button
+            class="w-1/2 py-2 rounded-md text-center transition-all duration-300 tab-btn"
+            data-form="signup"
+          >
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="form-section active" novalidate>
+          <div class="mb-4">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="login-email"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="login-email"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="login-email-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+          </div>
+          <div class="mb-6">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="login-password"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="login-password"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="login-password-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+            <a
+              href="#"
+              class="text-sm text-slate-600 hover:text-slate-800 mt-2 inline-block"
+              >Forgot Password?</a
+            >
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition-colors duration-300"
+          >
+            <span class="button-text">Login</span>
+            <span class="button-loader hidden"></span>
+          </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signupForm" class="form-section hidden" novalidate>
+          <div class="mb-4">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="signup-name"
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="signup-name"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="signup-name-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+          </div>
+          <div class="mb-4">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="signup-email"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="signup-email"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="signup-email-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+          </div>
+          <div class="mb-4">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="signup-password"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="signup-password"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="signup-password-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+            <div id="password-strength" class="mt-2"></div>
+          </div>
+          <div class="mb-6">
+            <label
+              class="block text-gray-700 text-sm font-medium mb-2"
+              for="signup-confirm-password"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="signup-confirm-password"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500"
+              required
+            />
+            <p
+              id="signup-confirm-password-error"
+              class="mt-1 text-sm text-red-600 hidden"
+            ></p>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-slate-700 text-white py-2 rounded-lg hover:bg-slate-800 transition-colors duration-300"
+          >
+            <span class="button-text">Create Account</span>
+            <span class="button-loader hidden"></span>
+          </button>
+        </form>
+
+        <!-- Social Login -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <p class="text-center text-gray-600 mb-4">Or continue with</p>
+          <div class="grid grid-cols-3 gap-4">
+            <a
+              href="https://accounts.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 transition-colors duration-200"
+            >
+              <img
+                src="https://www.google.com/favicon.ico"
+                alt="Google"
+                class="w-5 h-5"
+              />
+            </a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 transition-colors duration-200"
+            >
+              <img
+                src="https://www.facebook.com/favicon.ico"
+                alt="Facebook"
+                class="w-5 h-5"
+              />
+            </a>
+            <a
+              href="https://appleid.apple.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white hover:bg-gray-50 transition-colors duration-200"
+            >
+              <img
+                src="https://www.apple.com/favicon.ico"
+                alt="Apple"
+                class="w-5 h-5"
+              />
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact & Support -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <div class="text-center">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Need Help?</h2>
+            <div
+              class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+            >
+              <a
+                href="mailto:support@parkeasy.com"
+                class="text-slate-600 hover:text-slate-800 flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  />
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  />
+                </svg>
+                Email Support
+              </a>
+              <a
+                href="tel:+918300709713"
+                class="text-slate-600 hover:text-slate-800 flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                  />
+                </svg>
+                Call Us
+              </a>
+            </div>
+            <div class="mt-6 flex justify-center space-x-6">
+              <a
+                href="https://twitter.com/parkeasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-600 hover:text-slate-800 transition-colors duration-200"
+              >
+                <span class="sr-only">Twitter</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://linkedin.com/company/parkeasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-600 hover:text-slate-800 transition-colors duration-200"
+              >
+                <span class="sr-only">LinkedIn</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://instagram.com/parkeasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-600 hover:text-slate-800 transition-colors duration-200"
+              >
+                <span class="sr-only">Instagram</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Notification Container -->
+    <div
+      id="notification"
+      class="hidden fixed top-4 right-4 max-w-sm bg-white rounded-lg shadow-lg p-4 z-50"
+      role="alert"
+    >
+      <p class="text-sm font-medium"></p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+    // DOM Elements
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    const forms = document.querySelectorAll(".form-section");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const notification = document.getElementById("notification");
+  
+    // Form Toggle Functionality
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const formType = btn.dataset.form;
+  
+        // Update active states
+        tabBtns.forEach((b) => {
+          b.classList.remove("active");
+          b.setAttribute("aria-selected", "false");
+        });
+        forms.forEach((f) => f.classList.remove("active"));
+  
+        btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
+  
+        // Show selected form
+        const selectedForm = document.getElementById(`${formType}Form`);
+        selectedForm.classList.add("active");
+  
+        // Clear form and errors
+        selectedForm.reset();
+        clearAllErrors(selectedForm);
+      });
+    });
+  
+    // Validation Functions
+    const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return {
+        isValid: emailRegex.test(email),
+        error: "Please enter a valid email address",
+      };
+    };
+  
+    const validatePassword = (password) => {
+      const requirements = {
+        minLength: password.length >= 8,
+        hasUpperCase: /[A-Z]/.test(password),
+        hasLowerCase: /[a-z]/.test(password),
+        hasNumbers: /\d/.test(password),
+        hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+      };
+  
+      const errors = [];
+      if (!requirements.minLength) errors.push("At least 8 characters");
+      if (!requirements.hasUpperCase) errors.push("One uppercase letter");
+      if (!requirements.hasLowerCase) errors.push("One lowercase letter");
+      if (!requirements.hasNumbers) errors.push("One number");
+      if (!requirements.hasSpecialChar) errors.push("One special character");
+  
+      return {
+        isValid: Object.values(requirements).every(Boolean),
+        errors,
+        strength: Object.values(requirements).filter(Boolean).length,
+      };
+    };
+  
+    // Error Handling Functions
+    const showFieldError = (fieldId, error) => {
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(`${fieldId}-error`);
+  
+      field.classList.add("border-red-500");
+      errorEl.textContent = error;
+      errorEl.classList.remove("hidden");
+    };
+  
+    const clearFieldError = (fieldId) => {
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(`${fieldId}-error`);
+  
+      if (field && errorEl) {
+        field.classList.remove("border-red-500");
+        errorEl.classList.add("hidden");
+        errorEl.textContent = "";
+      }
+    };
+  
+    const clearAllErrors = (form) => {
+      form.querySelectorAll("input").forEach((input) => {
+        clearFieldError(input.id);
+      });
+    };
+  
+    // Show notification
+    const showNotification = (message, type = "success") => {
+      const notificationEl = document.getElementById("notification");
+      const messageEl = notificationEl.querySelector("p");
+  
+      messageEl.textContent = message;
+      notificationEl.classList.remove("hidden");
+      notificationEl.className = `fixed top-4 right-4 max-w-sm p-4 rounded-lg shadow-lg z-50 ${
+        type === "success"
+          ? "bg-green-100 text-green-800"
+          : "bg-red-100 text-red-800"
+      }`;
+  
+      setTimeout(() => {
+        notificationEl.classList.add("hidden");
+      }, 5000);
+    };
+  
+    // Password strength indicator
+    const updatePasswordStrength = (password) => {
+      const strengthEl = document.getElementById("password-strength");
+      const validation = validatePassword(password);
+  
+      const strengthClasses = [
+        "bg-red-200 w-1/4",
+        "bg-orange-200 w-2/4",
+        "bg-yellow-200 w-3/4",
+        "bg-green-200 w-full",
+      ];
+  
+      const strengthText = ["Weak", "Fair", "Good", "Strong"];
+      const strengthIndex = Math.min(Math.floor(validation.strength / 2), 3);
+  
+      strengthEl.innerHTML = `
+              <div class="h-2 rounded-full bg-gray-200">
+                  <div class="h-full rounded-full transition-all duration-300 ${strengthClasses[strengthIndex]}"></div>
+              </div>
+              <p class="text-sm mt-1 text-gray-600">
+                  ${strengthText[strengthIndex]} ${validation.errors.length ? `(${validation.errors.join(", ")})` : ""}
+              </p>
+          `;
+    };
+  
+    // Input Event Listeners
+    document.getElementById("signup-password").addEventListener("input", (e) => {
+      updatePasswordStrength(e.target.value);
+    });
+  
+    // Form Submission Handlers
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const buttonText = submitBtn.querySelector(".button-text");
+      const buttonLoader = submitBtn.querySelector(".button-loader");
+  
+      // Clear previous errors
+      clearAllErrors(loginForm);
+  
+      // Validate email
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+        showFieldError("login-email", emailValidation.error);
+        return;
+      }
+  
+      try {
+        submitBtn.disabled = true;
+        buttonText.classList.add("hidden");
+        buttonLoader.classList.remove("hidden");
+  
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+  
+        // Store session data
+        sessionStorage.setItem("auth_token", "sample_token");
+        localStorage.setItem("user_email", email);
+  
+        showNotification("Login successful! Redirecting...", "success");
+  
+        setTimeout(() => {
+          window.location.href = "gps.html";
+        }, 1500);
+      } catch (error) {
+        showNotification("Invalid credentials. Please try again.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        buttonText.classList.remove("hidden");
+        buttonLoader.classList.add("hidden");
+      }
+    });
+  
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const name = document.getElementById("signup-name").value.trim();
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value;
+      const confirmPassword = document.getElementById(
+        "signup-confirm-password",
+      ).value;
+      const submitBtn = signupForm.querySelector('button[type="submit"]');
+      const buttonText = submitBtn.querySelector(".button-text");
+      const buttonLoader = submitBtn.querySelector(".button-loader");
+  
+      // Clear previous errors
+      clearAllErrors(signupForm);
+  
+      // Validate name
+      if (name.length < 2) {
+        showFieldError("signup-name", "Name must be at least 2 characters long");
+        return;
+      }
+  
+      // Validate email
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+        showFieldError("signup-email", emailValidation.error);
+        return;
+      }
+  
+      // Validate password
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.isValid) {
+        showFieldError("signup-password", passwordValidation.errors[0]);
+        return;
+      }
+  
+      // Validate password confirmation
+      if (password !== confirmPassword) {
+        showFieldError("signup-confirm-password", "Passwords do not match");
+        return;
+      }
+  
+      try {
+        submitBtn.disabled = true;
+        buttonText.classList.add("hidden");
+        buttonLoader.classList.remove("hidden");
+  
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+  
+        showNotification(
+          "Account created successfully! Please check your email for verification.",
+          "success",
+        );
+  
+        // Store email for login form
+        localStorage.setItem("pendingVerification", email);
+  
+        // Switch to login form after delay
+        setTimeout(() => {
+          tabBtns[0].click();
+          document.getElementById("login-email").value = email;
+        }, 2000);
+      } catch (error) {
+        showNotification("Registration failed. Please try again.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        buttonText.classList.remove("hidden");
+        buttonLoader.classList.add("hidden");
+      }
+    });
+  
+    // Initialize forms
+    document.querySelectorAll("form").forEach((form) => {
+      form.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("input", () => {
+          clearFieldError(input.id);
+        });
+      });
+    });
+  });
+  
+    </script>
+  </body>
+</html>
