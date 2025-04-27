@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParkEasy - Select Slot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-100 min-h-screen">
+  <header class="bg-slate-700 text-white py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">ParkEasy</h1>
+      <nav>
+        <button id="logout" class="text-sm hover:underline">Logout</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-lg shadow-xl p-6">
+        <h2 class="text-2xl font-semibold mb-6">Select Vehicle Type</h2>
+
+        <div class="flex justify-center space-x-6 mb-8">
+          <button class="vehicle-btn px-8 py-3 bg-slate-700 text-white font-semibold rounded-full hover:bg-slate-900 transition" data-vehicle="car">Car</button>
+          <button class="vehicle-btn px-8 py-3 bg-slate-700 text-white font-semibold rounded-full hover:bg-slate-900 transition" data-vehicle="bike">Bike</button>
+          <button class="vehicle-btn px-8 py-3 bg-slate-700 text-white font-semibold rounded-full hover:bg-slate-900 transition" data-vehicle="others">Others</button>
+        </div>
+
+        <div id="slotSelection" class="hidden">
+          <h3 class="text-xl font-semibold mb-4">Select Parking Type</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700" data-type="vip">
+              <h3 class="text-xl font-semibold mb-3">VIP</h3>
+              <p class="text-2xl font-bold text-slate-700">₹1000 (Car) / ₹500 (Bike)</p>
+            </div>
+            <div class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700" data-type="premium">
+              <h3 class="text-xl font-semibold mb-3">Premium</h3>
+              <p class="text-2xl font-bold text-slate-700">₹700 (Car) / ₹350 (Bike)</p>
+            </div>
+            <div class="slot-option border-2 rounded-lg p-6 cursor-pointer hover:border-slate-700" data-type="normal">
+              <h3 class="text-xl font-semibold mb-3">Economy</h3>
+              <p class="text-2xl font-bold text-slate-700">₹300 (Car) / ₹150 (Bike)</p>
+            </div>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-4">Select Time Slot</h3>
+          <div class="mb-8">
+            <select id="timeDropdown" class="w-full border rounded-lg p-3">
+              <option value="">Select a Time Slot</option>
+            </select>
+          </div>
+
+          <div class="border-t pt-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+              <div class="mb-4 md:mb-0">
+                <h3 class="font-semibold">Selected Type:</h3>
+                <p id="selectedType" class="text-gray-600">None selected</p>
+              </div>
+              <div class="mb-4 md:mb-0">
+                <h3 class="font-semibold">Selected Time:</h3>
+                <p id="selectedTime" class="text-gray-600">None selected</p>
+              </div>
+            </div>
+            <button id="proceedToPayment" class="w-full py-3 px-4 bg-slate-700 text-white rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2" disabled>Proceed to Payment</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const vehicleBtns = document.querySelectorAll('.vehicle-btn');
+    const slotSelection = document.getElementById('slotSelection');
+    const slotOptions = document.querySelectorAll('.slot-option');
+    const selectedTypeEl = document.getElementById('selectedType');
+    const selectedTimeEl = document.getElementById('selectedTime');
+    const proceedBtn = document.getElementById('proceedToPayment');
+    const timeDropdown = document.getElementById('timeDropdown');
+
+    let selectedVehicle = '';
+    let selectedSlot = '';
+    let selectedTime = '';
+
+    const halfHourSlots = [
+      '6:00 AM', '6:30 AM', '7:00 AM', '7:30 AM',
+      '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM',
+      '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+      '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM',
+      '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM',
+      '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM',
+      '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM',
+      '8:00 PM', '8:30 PM', '9:00 PM'
+    ];
+
+    vehicleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedVehicle = btn.dataset.vehicle;
+        slotSelection.classList.remove('hidden');
+        selectedSlot = '';
+        selectedTime = '';
+        selectedTypeEl.textContent = 'None selected';
+        selectedTimeEl.textContent = 'None selected';
+        proceedBtn.disabled = true;
+      });
+    });
+
+    slotOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        slotOptions.forEach(opt => opt.classList.remove('border-slate-700'));
+        option.classList.add('border-slate-700');
+        selectedSlot = option.dataset.type;
+        updateSummary();
+      });
+    });
+
+    timeDropdown.addEventListener('change', (e) => {
+      selectedTime = e.target.value;
+      updateSummary();
+    });
+
+    function updateSummary() {
+      if (selectedSlot && selectedTime) {
+        selectedTypeEl.textContent = `${selectedSlot.toUpperCase()} (${selectedVehicle.toUpperCase()})`;
+        selectedTimeEl.textContent = selectedTime;
+        proceedBtn.disabled = false;
+      }
+    }
+
+    function loadTimeSlots() {
+      halfHourSlots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot;
+        option.textContent = slot;
+        timeDropdown.appendChild(option);
+      });
+    }
+
+    loadTimeSlots();
+    
+  // When "Proceed to Payment" button is clicked
+  proceedBtn.addEventListener('click', () => {
+  // Save selected details to localStorage
+  localStorage.setItem('selectedVehicle', selectedVehicle);
+  localStorage.setItem('selectedSlot', selectedSlot);
+  localStorage.setItem('selectedTime', selectedTime);
+  
+  // Redirect to the payment page
+  window.location.href = "payment.html";
+});
+
+
+  </script>
+</body>
+</html>
