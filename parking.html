@@ -83,40 +83,26 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Get all "Select Location" buttons
-      const selectButtons = document.querySelectorAll(".check-btn");
-
-      // Add click event listener to each button
-      selectButtons.forEach((button) => {
-        button.addEventListener("click", (event) => {
-          const locationCard = event.target.closest(".location-card");
-          const locationName = locationCard.querySelector("h3").textContent;
-
-          // Show confirmation message in modal
-          const modal = document.getElementById("message-modal");
-          const modalTitle = document.getElementById("modal-title");
-          const modalMessage = document.getElementById("modal-message");
-          const modalClose = document.getElementById("modal-close");
-
-          modalTitle.textContent = "Location Selected";
-          modalMessage.textContent = `You have selected ${locationName}. Redirecting to payment...`;
-          modal.classList.remove("hidden");
-
-          // Close modal and redirect to payment.html after a short delay
-          modalClose.addEventListener("click", () => {
-            modal.classList.add("hidden");
-            window.location.href = "payment.html";
-          });
-
-          setTimeout(() => {
-            modal.classList.add("hidden");
-            window.location.href = "payment.html";
-          }, 3000); // Redirect after 3 seconds
+      const locationButtons = document.querySelectorAll('.check-btn');
+      
+      locationButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const location = button.closest('.location-card').getAttribute('data-location');
+          
+          // Store selected location in localStorage
+          localStorage.setItem("selectedLocation", location);
+          
+          // Show a confirmation message
+          document.getElementById("modal-title").textContent = "Location Selected";
+          document.getElementById("modal-message").textContent = `You have selected ${location} as your parking location.`;
+          document.getElementById("message-modal").classList.remove("hidden");
         });
       });
 
-      // Make "Available Parking Locations" title bold
-      const title = document.querySelector("h2");
-      title.classList.add("font-bold");
+      document.getElementById("modal-close").addEventListener("click", () => {
+        document.getElementById("message-modal").classList.add("hidden");
+        window.location.href = "slot_selection.html"; // Redirect to slot selection page
+      });
     });
   </script>
+</html>
