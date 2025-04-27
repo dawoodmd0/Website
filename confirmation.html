@@ -1,89 +1,86 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ParkEasy - Booking Confirmed</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body class="bg-neutral-100 min-h-screen">
-    <main class="container mx-auto px-4 py-16 flex items-center justify-center">
-      <div class="max-w-md w-full">
-        <div class="bg-white rounded-lg shadow-xl p-8 text-center">
-          <div class="mb-6">
-            <div
-              class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto"
-            >
-              <svg
-                class="w-8 h-8 text-green-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-            </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkEasy - Booking Confirmed</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-100 min-h-screen">
+<main class="container mx-auto px-4 py-16 flex items-center justify-center">
+  <div class="max-w-md w-full">
+    <div class="bg-white rounded-lg shadow-xl p-8 text-center">
+      <div class="mb-6">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+          <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">Booking Confirmed!</h1>
+      <p class="text-gray-600 mb-8">
+        Your parking slot has been successfully booked. A confirmation email has been sent to your registered email address.
+      </p>
+
+      <div class="bg-gray-50 rounded-lg p-6 mb-8">
+        <h2 class="font-semibold mb-4">Booking Details</h2>
+        <div class="space-y-2 text-left">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Booking ID:</span>
+            <span id="bookingId" class="font-medium">PK12345</span>
           </div>
-
-          <h1 class="text-2xl font-bold text-gray-800 mb-4">
-            Booking Confirmed!
-          </h1>
-          <p class="text-gray-600 mb-8">
-            Your parking slot has been successfully booked. A confirmation email
-            has been sent to your registered email address.
-          </p>
-
-          <div class="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 class="font-semibold mb-4">Booking Details</h2>
-            <div class="space-y-2 text-left">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Booking ID:</span>
-                <span id="bookingId" class="font-medium">PK12345</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Location:</span>
-                <span id="location" class="font-medium">Downtown Parking</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Slot Type:</span>
-                <span id="slotType" class="font-medium">VIP</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Duration:</span>
-                <span id="duration" class="font-medium">2 hours</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Amount Paid:</span>
-                <span id="amountPaid" class="font-medium">$40.00</span>
-              </div>
-            </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Location:</span>
+            <span id="location" class="font-medium">Downtown Parking</span>
           </div>
-
-          <div class="space-x-4">
-            <a
-              href="#"
-              class="inline-block py-3 px-6 bg-slate-700 text-white rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-              onclick="window.print()"
-            >
-              Print Receipt
-            </a>
-            <a
-              href="gps.html"
-              class="inline-block py-3 px-6 border border-slate-700 text-slate-700 rounded-md hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-            >
-              Book Another
-            </a>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Slot Type:</span>
+            <span id="slotType" class="font-medium">VIP</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Duration:</span>
+            <span id="duration" class="font-medium">2 hours</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Amount Paid:</span>
+            <span id="amountPaid" class="font-medium">₹0.00</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Cardholder Name:</span>
+            <span id="cardholderName" class="font-medium">N/A</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Transaction Time:</span>
+            <span id="transactionTime" class="font-medium">N/A</span>
           </div>
         </div>
       </div>
-    </main>
 
-    <script src="confirmation.js"></script>
-  </body>
+      <div class="space-x-4">
+        <a href="#" class="inline-block py-3 px-6 bg-slate-700 text-white rounded-md hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2" onclick="window.print()">
+          Print Receipt
+        </a>
+        <a href="gps.html" class="inline-block py-3 px-6 border border-slate-700 text-slate-700 rounded-md hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
+          Book Another
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const bookingId = 'PK' + Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+  const cardholderName = localStorage.getItem('cardholderName') || 'N/A';
+  const amountPaid = localStorage.getItem('amountPaid') || '0';
+  const transactionTime = localStorage.getItem('transactionTime') || new Date().toLocaleString();
+
+  document.getElementById('bookingId').textContent = bookingId;
+  document.getElementById('amountPaid').textContent = `₹${amountPaid}`;
+  document.getElementById('cardholderName').textContent = cardholderName;
+  document.getElementById('transactionTime').textContent = transactionTime;
+});
+</script>
+</body>
 </html>
